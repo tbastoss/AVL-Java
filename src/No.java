@@ -4,14 +4,14 @@ public class No {
 	private int fb;
 	private No filhoDaEsquerda;
 	private No filhoDaDireita;
-	private No father;
+	private No pai;
 	
 	public No(int chave){
 		this.chave = chave;
 		this.fb = 0;
 		this.filhoDaEsquerda = null;
 		this.filhoDaDireita = null;
-		this.father = null;
+		this.pai = null;
 	}
 
 	public int getChave() {
@@ -47,10 +47,10 @@ public class No {
 	}
 
 	public No getPai() {
-		return father;
+		return pai;
 	}
 
 	public void setPai(No pai) {
-		this.father = pai;
+		this.pai = pai;
 	}
 }
