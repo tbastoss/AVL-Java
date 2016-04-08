@@ -13,16 +13,42 @@ public class Arvore {
 	}
 
 	/*busca atraves da chave do nó*/
-	public No busca(int x, No pt){ /*pt, na primeira interação deve ser a raiz da arvore*/
-		if (pt == null || pt.getChave() == x)
-			return pt;
-		if (x < pt.getChave())
-			return busca(x, pt.getFilhoDaEsquerda());
-		else 
-			return busca(x, pt.getFilhoDaDireita());		
+	public No busca(int x){
+		No pt = this.raiz;
+		while (pt != null && pt.getChave() != x){
+			if (x < pt.getChave())
+				pt = pt.getFilhoDaEsquerda();
+			else if (x > pt.getChave())
+				pt = pt.getFilhoDaDireita();
+		}
+		return pt;		
 	}
 	
-	public void inserir (No insert){
+	public void inserir (No x){
+		No y = null;
+		No pt = this.raiz;
+		if (busca(x.getChave()) == null){
+			while (pt != null){
+				y = pt;
+				if (x.getChave() < pt.getChave())
+					pt = pt.getFilhoDaEsquerda();
+				else if (x.getChave() > pt.getChave())
+					pt = pt.getFilhoDaDireita();
+			}
+			x.setPai(y);
+			if (y == null){
+				setRaiz(x);
+				setNo(x);
+				setEmpty(false);
+			}
+			else if(x.getChave() < y.getChave())
+				y.setFilhoDaEsquerda(x);
+			else if (x.getChave() > y.getChave())
+				y.setFilhoDaDireita(x);
+		}
+	}
+	
+	public void impresaoEmOrdem(){
 		
 	}
 	
