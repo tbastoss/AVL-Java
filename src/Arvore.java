@@ -46,10 +46,17 @@ public class Arvore {
 			else if (x.getChave() > y.getChave())
 				y.setFilhoDaDireita(x);
 		}
+		else 
+			System.out.println("elemento ja " + x.getChave() + " existente!");
 	}
 	
-	public void impresaoEmOrdem(){
-		
+	//Inicialmente pt eh raiz
+	public void impressaoEmOrdem(No pt){
+		if (pt.getFilhoDaEsquerda() != null)
+			impressaoEmOrdem(pt.getFilhoDaEsquerda());
+		System.out.println(pt.getChave());
+		if (pt.getFilhoDaDireita() != null)
+			impressaoEmOrdem(pt.getFilhoDaDireita());
 	}
 	
 	public No getNo() {

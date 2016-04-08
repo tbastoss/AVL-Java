@@ -9,5 +9,16 @@ public class Test {
 		
 		Arvore t = new Arvore (a);
 		
+		t.inserir(b);
+		t.inserir(c);
+		t.inserir(d);
+		t.inserir(e);	
+		
+		t.impressaoEmOrdem(t.getRaiz());
+		
+		No erro = new No (7);
+		t.inserir(erro);
+		
+		t.impressaoEmOrdem(t.getRaiz());
 	}
 }
