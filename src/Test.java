@@ -16,6 +16,8 @@ public class Test {
 		t.inserir_AVL(c);
 		t.impressaoEmOrdem(t.getRaiz());
 		System.out.println();
+		System.out.println(t.getNoResponsavel().getChave());
+		
 		
 	}
 }

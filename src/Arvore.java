@@ -66,25 +66,25 @@ public class Arvore {
 			if (desregulou == false)
 				return true;
 			else if (desregulou == true){
-				if (pt.getFb() == -2){ /*CASO 1*/ /**-> O erro está aqui... está passando como paramentro o nó q inseriu e nao o responsável*/
-						if(pt.getFilhoDaEsquerda().getAltura() > pt.getFilhoDaDireita().getAltura() && pt.getFilhoDaEsquerda().getFilhoDaEsquerda().getAltura() > pt.getFilhoDaEsquerda().getFilhoDaDireita().getAltura()) //Rotação Direita        h(p.esq)>h(p.dir) e h(u.esq)>h(u.dir))
-							rotacionar_dir(pt);
-						else if (pt.getFilhoDaEsquerda().getAltura() > pt.getFilhoDaDireita().getAltura() && pt.getFilhoDaEsquerda().getFilhoDaEsquerda().getAltura() < pt.getFilhoDaEsquerda().getFilhoDaDireita().getAltura()) // Rotação Direita Dupla    h(p.esq)>h(p.dir) e h(u.esq)<h(u.dir)
-							rotacionar_dir_dup(pt);
-						//if (pt.getFilhoDaEsquerda().getFb() == 1) //rotação direita dupla
-						//	rotacionar_esq(pt.getFilhoDaEsquerda());
-					//pt = rotacionar_dir(pt);
+				if (getNoResponsavel().getFb() == -2){ /*CASO 1*/
+						/*if(getNoResponsavel().getFilhoDaEsquerda().getAltura() > getNoResponsavel().getFilhoDaDireita().getAltura() && getNoResponsavel().getFilhoDaEsquerda().getFilhoDaEsquerda().getAltura() > getNoResponsavel().getFilhoDaEsquerda().getFilhoDaDireita().getAltura()) //Rotação Direita        h(p.esq)>h(p.dir) e h(u.esq)>h(u.dir))
+							rotacionar_dir(getNoResponsavel());
+						else if (getNoResponsavel().getFilhoDaEsquerda().getAltura() > getNoResponsavel().getFilhoDaDireita().getAltura() && getNoResponsavel().getFilhoDaEsquerda().getFilhoDaEsquerda().getAltura() < getNoResponsavel().getFilhoDaEsquerda().getFilhoDaDireita().getAltura()) // Rotação Direita Dupla    h(p.esq)>h(p.dir) e h(u.esq)<h(u.dir)
+							rotacionar_dir_dup(getNoResponsavel());/**/
+						if (getNoResponsavel().getFilhoDaEsquerda().getFb() == 1) //rotação direita dupla
+							rotacionar_esq(getNoResponsavel().getFilhoDaEsquerda());
+						setNoResponsavel(rotacionar_dir(getNoResponsavel()));
 				}
-				else if (pt.getFb() == 2){ //CASO 2
-					if(pt.getFilhoDaEsquerda().getAltura() < pt.getFilhoDaDireita().getAltura() && pt.getFilhoDaDireita().getFilhoDaEsquerda().getAltura() < pt.getFilhoDaDireita().getFilhoDaDireita().getAltura()) //Rotação Esquerda h(p.esq)<h(p.dir) e h(z.esq)<h(z.dir)
-						rotacionar_esq(pt);
-					else if(pt.getFilhoDaEsquerda().getAltura() < pt.getFilhoDaDireita().getAltura() && pt.getFilhoDaDireita().getFilhoDaEsquerda().getAltura() > pt.getFilhoDaDireita().getFilhoDaDireita().getAltura()) //Rotação Dupla Esquerda h(p.esq)<h(p.dir) e h(z.esq)>h(z.dir)
-						rotacionar_esq_dup(pt);
-					/*if (pt.getFilhoDaDireita().getFb() == -1)
-						rotacionar_dir(pt.getFilhoDaDireita());
-					pt = rotacionar_esq(pt);/**/
+				else if (getNoResponsavel().getFb() == 2){ //CASO 2
+					/*if(getNoResponsavel().getFilhoDaEsquerda().getAltura() < getNoResponsavel().getFilhoDaDireita().getAltura() && getNoResponsavel().getFilhoDaDireita().getFilhoDaEsquerda().getAltura() < getNoResponsavel().getFilhoDaDireita().getFilhoDaDireita().getAltura()) //Rotação Esquerda h(p.esq)<h(p.dir) e h(z.esq)<h(z.dir)
+						rotacionar_esq(getNoResponsavel());
+					else if(getNoResponsavel().getFilhoDaEsquerda().getAltura() < getNoResponsavel().getFilhoDaDireita().getAltura() && getNoResponsavel().getFilhoDaDireita().getFilhoDaEsquerda().getAltura() > getNoResponsavel().getFilhoDaDireita().getFilhoDaDireita().getAltura()) //Rotação Dupla Esquerda h(p.esq)<h(p.dir) e h(z.esq)>h(z.dir)
+						rotacionar_esq_dup(getNoResponsavel());/**/
+					if (getNoResponsavel().getFilhoDaDireita().getFb() == -1)
+						rotacionar_dir(getNoResponsavel().getFilhoDaDireita());
+					setNoResponsavel(rotacionar_esq(getNoResponsavel()));/**/
 				}
-				verificar_fb_no(pt.getPai());
+				retorno = verificar_fb_no(pt.getPai()); /**POSSÍVEL PROBLEMA  -> trocar pt por "getNoResponsavel()"*/
 			}
 		}
 		return retorno;
@@ -113,9 +113,12 @@ public class Arvore {
 		else 
 			calcular_fb(pt);
 		if (pt.getFb() < -1 || pt.getFb() > 1){
-			return true; //Está balanceado
+			setNoResponsavel(pt);
+			return true;			
 		}
 		else {
+			//if (pt.getFb() < -2 || pt.getFb() > 2)
+				//setNoResponsavel(pt);
 			pt = pt.getPai();
 			return verificar_fb_no(pt);
 		}
