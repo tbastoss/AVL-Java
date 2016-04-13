@@ -25,7 +25,7 @@ public class Arvore {
 	}
 	
 	//Insere o no x na arvore
-	public No inserir (No x){
+	private No inserir (No x){
 		No retorno = null;
 		No y = null;
 		No pt = busca(x.getChave());
@@ -65,8 +65,26 @@ public class Arvore {
 			desregulou = verificar_fb_no(pt.getPai());
 			if (desregulou == false)
 				return true;
-			else {
-				
+			else if (desregulou == true){
+				if (pt.getFb() == -2){ /*CASO 1*/ /**-> O erro está aqui... está passando como paramentro o nó q inseriu e nao o responsável*/
+						if(pt.getFilhoDaEsquerda().getAltura() > pt.getFilhoDaDireita().getAltura() && pt.getFilhoDaEsquerda().getFilhoDaEsquerda().getAltura() > pt.getFilhoDaEsquerda().getFilhoDaDireita().getAltura()) //Rotação Direita        h(p.esq)>h(p.dir) e h(u.esq)>h(u.dir))
+							rotacionar_dir(pt);
+						else if (pt.getFilhoDaEsquerda().getAltura() > pt.getFilhoDaDireita().getAltura() && pt.getFilhoDaEsquerda().getFilhoDaEsquerda().getAltura() < pt.getFilhoDaEsquerda().getFilhoDaDireita().getAltura()) // Rotação Direita Dupla    h(p.esq)>h(p.dir) e h(u.esq)<h(u.dir)
+							rotacionar_dir_dup(pt);
+						//if (pt.getFilhoDaEsquerda().getFb() == 1) //rotação direita dupla
+						//	rotacionar_esq(pt.getFilhoDaEsquerda());
+					//pt = rotacionar_dir(pt);
+				}
+				else if (pt.getFb() == 2){ //CASO 2
+					if(pt.getFilhoDaEsquerda().getAltura() < pt.getFilhoDaDireita().getAltura() && pt.getFilhoDaDireita().getFilhoDaEsquerda().getAltura() < pt.getFilhoDaDireita().getFilhoDaDireita().getAltura()) //Rotação Esquerda h(p.esq)<h(p.dir) e h(z.esq)<h(z.dir)
+						rotacionar_esq(pt);
+					else if(pt.getFilhoDaEsquerda().getAltura() < pt.getFilhoDaDireita().getAltura() && pt.getFilhoDaDireita().getFilhoDaEsquerda().getAltura() > pt.getFilhoDaDireita().getFilhoDaDireita().getAltura()) //Rotação Dupla Esquerda h(p.esq)<h(p.dir) e h(z.esq)>h(z.dir)
+						rotacionar_esq_dup(pt);
+					/*if (pt.getFilhoDaDireita().getFb() == -1)
+						rotacionar_dir(pt.getFilhoDaDireita());
+					pt = rotacionar_esq(pt);/**/
+				}
+				verificar_fb_no(pt.getPai());
 			}
 		}
 		return retorno;
@@ -89,13 +107,14 @@ public class Arvore {
 	}
 	
 	//Verificação do Balanceamento da AVL
-	public boolean verificar_fb_no(No pt){
+	public boolean verificar_fb_no(No pt){ /**Onde devo colocar pra ele setar o nó responsável pra poder usar nas rotação?*/
 		if (pt == null)
 			return false;
 		else 
 			calcular_fb(pt);
-		if (pt.getFb() < -1 || pt.getFb() > 1)
+		if (pt.getFb() < -1 || pt.getFb() > 1){
 			return true; //Está balanceado
+		}
 		else {
 			pt = pt.getPai();
 			return verificar_fb_no(pt);
@@ -175,13 +194,12 @@ public class Arvore {
 	}
 	
 	//Inicialmente pt eh raiz
-	public void impressaoEmOrdem(No pt){	  
+	public void impressaoEmOrdem (No pt){	  
 	  if (pt.getFilhoDaEsquerda() != null)
-	 
-			impressaoEmOrdem(pt.getFilhoDaEsquerda());
-		System.out.println(pt.getChave());
-		if (pt.getFilhoDaDireita() != null)
-			impressaoEmOrdem(pt.getFilhoDaDireita());
+		impressaoEmOrdem(pt.getFilhoDaEsquerda());
+	  System.out.print(pt.getChave() + "(" + pt.getFb() + ")");
+	  if (pt.getFilhoDaDireita() != null)
+		impressaoEmOrdem(pt.getFilhoDaDireita());
 	}/**/
 	
 	public No getNo() {
