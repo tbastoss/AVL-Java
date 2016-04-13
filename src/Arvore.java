@@ -25,10 +25,13 @@ public class Arvore {
 	}
 	
 	//Insere o no x na arvore
-	public void inserir (No x){
+	public No inserir (No x){
+		No retorno = null;
 		No y = null;
-		No pt = this.raiz;
-		if (busca(x.getChave()) == null){
+		No pt = busca(x.getChave());
+		if (pt == null){
+			retorno = x;
+			pt = getRaiz();
 			while (pt != null){
 				y = pt;
 				if (x.getChave() < pt.getChave())
@@ -47,9 +50,26 @@ public class Arvore {
 				y.setFilhoDaEsquerda(x);
 			else if (x.getChave() > y.getChave())
 				y.setFilhoDaDireita(x);
+			return retorno;
 		}
 		else 
-			System.out.println("elemento ja " + x.getChave() + " existente!");
+			return retorno;
+	}
+	
+	//Procedimento para inserir na AVL
+	public boolean inserir_AVL(No x){
+		No pt = inserir(x);
+		boolean retorno = false;
+		boolean desregulou;
+		if (pt != null){
+			desregulou = verificar_fb_no(pt.getPai());
+			if (desregulou == false)
+				return true;
+			else {
+				
+			}
+		}
+		return retorno;
 	}
 	
 	//Calcular Fator de Balanceamento do no p
@@ -68,8 +88,21 @@ public class Arvore {
 		p.setAltura(Math.max(p.getAlturaSubArDi(), p.getAlturaSubArEsq()) + 1);
 	}
 	
-	//Rotação Direita
+	//Verificação do Balanceamento da AVL
+	public boolean verificar_fb_no(No pt){
+		if (pt == null)
+			return false;
+		else 
+			calcular_fb(pt);
+		if (pt.getFb() < -1 || pt.getFb() > 1)
+			return true; //Está balanceado
+		else {
+			pt = pt.getPai();
+			return verificar_fb_no(pt);
+		}
+	}
 	
+	//Rotação Direita
 	//CASO 1.1: h(p.esq)>h(p.dir) e h(u.esq)>h(u.dir)
 	public No rotacionar_dir (No p){
 		No u = p.getFilhoDaEsquerda();
@@ -96,9 +129,49 @@ public class Arvore {
 		return u;
 	}
 	
+	//Rotação Esquerda
 	//CASO 2.1: h(p.esq)<h(p.dir) e h(z.esq)<h(z.dir)
 	public No rotacionar_esq (No p){
-		return null;
+		No z = p.getFilhoDaDireita();
+		
+		p.setFilhoDaDireita(z.getFilhoDaEsquerda());
+		if (p.getFilhoDaDireita() != null)
+			p.getFilhoDaDireita().setPai(p);
+		z.setFilhoDaEsquerda(p);
+		z.setPai(p.getPai());
+		p.setPai(z);
+		
+		calcular_fb(p);
+		calcular_fb(z);
+		if(z.getPai() != null){
+			if (z.getChave() > z.getPai().getChave())
+				z.getPai().setFilhoDaDireita(z);
+			else if (z.getChave() < z.getPai().getChave())
+				z.getPai().setFilhoDaEsquerda(z);
+		}
+		else 
+			setRaiz(z);
+		return z;
+	}
+	
+	//Rotação Dupla Direita
+	//CASO 1.2: h(p.esq)>h(p.dir) e h(u.esq)<h(u.dir)
+	public No rotacionar_dir_dup(No p){
+		No retorno = null;
+		No u = p.getFilhoDaEsquerda();
+		rotacionar_esq(u);
+		retorno = rotacionar_dir(p);
+		return retorno;
+	}
+	
+	//Rotação Dupla Esquerda
+	//CASO 2.2: h(p.esq)<h(p.dir) e h(z.esq)>h(z.dir)
+	public No rotacionar_esq_dup(No p){
+		No retorno = null;
+		No z = p.getFilhoDaDireita();
+		rotacionar_dir(z);
+		retorno = rotacionar_esq(p);
+		return retorno;
 	}
 	
 	//Inicialmente pt eh raiz
