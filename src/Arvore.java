@@ -1,13 +1,12 @@
 
 public class Arvore {
-	private No no;
 	private No raiz;
 	private No noResponsavel;
 	private boolean isEmpty;	
 	
 	public Arvore (No no){
-		this.no = no;
-		this.raiz = this.no;
+		//this.no = no;
+		this.raiz = no;
 		this.noResponsavel = null;
 		this.isEmpty = false;
 	}
@@ -25,7 +24,7 @@ public class Arvore {
 	}
 	
 	//Insere o no x na arvore
-	private No inserir (No x){
+	public No inserir (No x){
 		No retorno = null;
 		No y = null;
 		No pt = busca(x.getChave());
@@ -42,7 +41,6 @@ public class Arvore {
 			x.setPai(y);
 			if (y == null){
 				setRaiz(x);
-				setNo(x);
 				setNoResponsavel(null);
 				setEmpty(false);
 			}
@@ -50,6 +48,8 @@ public class Arvore {
 				y.setFilhoDaEsquerda(x);
 			else if (x.getChave() > y.getChave())
 				y.setFilhoDaDireita(x);
+			else 
+				retorno = null;
 			return retorno;
 		}
 		else 
@@ -57,12 +57,12 @@ public class Arvore {
 	}
 	
 	//Procedimento para inserir na AVL
-	public boolean inserir_AVL(No x){
+	public boolean inserir_AVL(No x){ //Passa o no q ja foi inserido e um booleando com o resultado do verificar_fb_no(x.pai).. para fazer as rotações
 		No pt = inserir(x);
 		boolean retorno = false;
 		boolean desregulou;
 		if (pt != null){
-			desregulou = verificar_fb_no(pt.getPai());
+			desregulou = verificar_fb_no(pt.getPai()); //Fazer direto na main
 			if (desregulou == false)
 				return true;
 			else if (desregulou == true){
@@ -76,7 +76,7 @@ public class Arvore {
 						rotacionar_dir(getNoResponsavel().getFilhoDaDireita());
 					setNoResponsavel(rotacionar_esq(getNoResponsavel()));/**/
 				}
-				retorno = verificar_fb_no(getNoResponsavel().getPai()); /**POSSÍVEL PROBLEMA  -> trocar pt por "getNoResponsavel()"*/
+				retorno = verificar_fb_no(getNoResponsavel().getPai()); 
 			}
 		}
 		return retorno;
@@ -123,7 +123,7 @@ public class Arvore {
 		if (p.getFilhoDaEsquerda() != null)
 			p.getFilhoDaEsquerda().setPai(p);
 		u.setFilhoDaDireita(p);
-		p.setPai(p.getPai());
+		u.setPai(p.getPai());
 		p.setPai(u);
 		
 		calcular_fb(p);
@@ -166,41 +166,13 @@ public class Arvore {
 		return z;
 	}
 	
-	//Rotação Dupla Direita
-	//CASO 1.2: h(p.esq)>h(p.dir) e h(u.esq)<h(u.dir)
-	public No rotacionar_dir_dup(No p){
-		No retorno = null;
-		No u = p.getFilhoDaEsquerda();
-		rotacionar_esq(u);
-		retorno = rotacionar_dir(p);
-		return retorno;
-	}
-	
-	//Rotação Dupla Esquerda
-	//CASO 2.2: h(p.esq)<h(p.dir) e h(z.esq)>h(z.dir)
-	public No rotacionar_esq_dup(No p){
-		No retorno = null;
-		No z = p.getFilhoDaDireita();
-		rotacionar_dir(z);
-		retorno = rotacionar_esq(p);
-		return retorno;
-	}
-	
 	//Inicialmente pt eh raiz
 	public void impressaoEmOrdem (No pt){	  
 	  if (pt.getFilhoDaEsquerda() != null)
 		impressaoEmOrdem(pt.getFilhoDaEsquerda());
-	  System.out.print(pt.getChave() + "(" + pt.getFb() + ")");
+	  System.out.print(pt.getChave() + "(" + pt.getFb() + ") ");
 	  if (pt.getFilhoDaDireita() != null)
 		impressaoEmOrdem(pt.getFilhoDaDireita());
-	}/**/
-	
-	public No getNo() {
-		return no;
-	}
-
-	public void setNo(No no) {
-		this.no = no;
 	}
 
 	public No getRaiz() {
@@ -227,14 +199,3 @@ public class Arvore {
 		this.isEmpty = isEmpty;
 	}
 }
-//FB = -2
-/*if(getNoResponsavel().getFilhoDaEsquerda().getAltura() > getNoResponsavel().getFilhoDaDireita().getAltura() && getNoResponsavel().getFilhoDaEsquerda().getFilhoDaEsquerda().getAltura() > getNoResponsavel().getFilhoDaEsquerda().getFilhoDaDireita().getAltura()) //Rotação Direita        h(p.esq)>h(p.dir) e h(u.esq)>h(u.dir))
-rotacionar_dir(getNoResponsavel());
-else if (getNoResponsavel().getFilhoDaEsquerda().getAltura() > getNoResponsavel().getFilhoDaDireita().getAltura() && getNoResponsavel().getFilhoDaEsquerda().getFilhoDaEsquerda().getAltura() < getNoResponsavel().getFilhoDaEsquerda().getFilhoDaDireita().getAltura()) // Rotação Direita Dupla    h(p.esq)>h(p.dir) e h(u.esq)<h(u.dir)
-rotacionar_dir_dup(getNoResponsavel());/**/
-
-//FB = 2
-/*if(getNoResponsavel().getFilhoDaEsquerda().getAltura() < getNoResponsavel().getFilhoDaDireita().getAltura() && getNoResponsavel().getFilhoDaDireita().getFilhoDaEsquerda().getAltura() < getNoResponsavel().getFilhoDaDireita().getFilhoDaDireita().getAltura()) //Rotação Esquerda h(p.esq)<h(p.dir) e h(z.esq)<h(z.dir)
-rotacionar_esq(getNoResponsavel());
-else if(getNoResponsavel().getFilhoDaEsquerda().getAltura() < getNoResponsavel().getFilhoDaDireita().getAltura() && getNoResponsavel().getFilhoDaDireita().getFilhoDaEsquerda().getAltura() > getNoResponsavel().getFilhoDaDireita().getFilhoDaDireita().getAltura()) //Rotação Dupla Esquerda h(p.esq)<h(p.dir) e h(z.esq)>h(z.dir)
-rotacionar_esq_dup(getNoResponsavel());/**/
