@@ -5,7 +5,6 @@ public class Arvore {
 	private boolean isEmpty;	
 	
 	public Arvore (No no){
-		//this.no = no;
 		this.raiz = no;
 		this.noResponsavel = null;
 		this.isEmpty = false;
